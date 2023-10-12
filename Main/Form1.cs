@@ -22,48 +22,8 @@ namespace Main
             graphics = Graphics.FromImage(bitMap);
         }
 
-        private string ReadFile(string filePath)
-        {
-            string hexString = "";
-            int curHexIdx;
-
-            FileStream fs = new FileStream(filePath, FileMode.Open);
-
-            while ((curHexIdx = fs.ReadByte()) != -1)
-            {
-                hexString += string.Format("{0:X2}", curHexIdx);
-            }
-
-            fs.Close();
-
-            return hexString;
-        }
-
-
-        private Color[,] GetPalleteArray(int palleteSide, string hexPallete)
-        {
-            Color[,] pallete = new Color[palleteSide, palleteSide];
-
-            for (int y = 0; y < palleteSide; y++)
-            {
-                for (int x = 0; x < palleteSide; x++)
-                {
-
-                    string stringArgb = hexPallete.Substring((y * palleteSide + x) * 8, 8);
-                    int argb = Int32.Parse(stringArgb, NumberStyles.HexNumber);
-                    Color color = Color.FromArgb(argb);
-
-                    pallete[y, x] = color;
-                }
-            }
-
-            return pallete;
-        }
-
-
         private void DrawImage(string hexPicture, int height, int width, Color[,] pallete)
         {
-
             int firstTwoBits = 12; // 1100
             int secondTwoBits = 3; // 0011
 
@@ -93,43 +53,10 @@ namespace Main
 
         private void ImageHandler()
         {
-
-            int width;
-            int height;
-            int bitsOnPixel;
-            int palleteColorNumber;
-            int palleteSideLength;
-            int headerLength = 7 * 2;
-            int imageSquare;
-            int palleteSize;
-
-
-            string hexString = ReadFile(@".\labaARGB.bin");
-
-
-            // заголовок
-            string widthHexStr = hexString.Substring(0, 4);
-            string heightHexStr = hexString.Substring(4, 4);
-            string bitOnPixedHexStr = hexString.Substring(8, 2);
-            string palleteColorNumberHexStr = hexString.Substring(10, 4);
-
-
-            width = int.Parse(widthHexStr, NumberStyles.HexNumber);
-            height = int.Parse(heightHexStr, NumberStyles.HexNumber);
-            bitsOnPixel = int.Parse(bitOnPixedHexStr, NumberStyles.HexNumber);
-            palleteColorNumber = int.Parse(palleteColorNumberHexStr, NumberStyles.HexNumber);
-            palleteSideLength = (int)Math.Sqrt(palleteColorNumber);
-            imageSquare = width * height;
-
-            palleteSize = (imageSquare * bitsOnPixel) / 8;
-
-
-            string hexPallete = hexString.Substring(headerLength, hexString.Length - headerLength - palleteSize * 2);
-            Color[,] pallete = GetPalleteArray(palleteSideLength, hexPallete);
-
-
-            string hexPicture = hexString.Substring(142, hexString.Length - 142);
-            DrawImage(hexPicture, height, width, pallete);
+            Image image = new Image();
+            image.ReadFromFile("./labaARGB.bin");
+            
+            DrawImage(image.HexPicture, image.Height, image.Width, image.Pallete);
         }
 
 
@@ -169,7 +96,7 @@ namespace Main
         }
 
 
-        private void BmpImageHandler()
+        /*private void BmpImageHandler()
         {
             int width;
             int height;
@@ -185,6 +112,6 @@ namespace Main
 
             string hexPicture = hexString.Substring(54 * 2, hexString.Length - 54 * 2);
             DrawBmpPicture(hexPicture, height, width);
-        }
+        }*/
     }
 }
