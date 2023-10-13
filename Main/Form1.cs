@@ -26,21 +26,20 @@ namespace Main
         {
             int firstTwoBits = 12; // 1100
             int secondTwoBits = 3; // 0011
+            int imageScale = 30;   // увеличение изображения для того чтобы его было видно на экране
 
-            int imageScale = 30;
-            int count = 0; // небольшой костыль
+            int pixelCount = 0;
             for (int y = 0; y < height * imageScale; y += imageScale)
             {
                 for (int x = 0; x < width * imageScale; x += imageScale)
                 {
 
-                    int curDecimalNumber = int.Parse(hexPicture[count].ToString(), NumberStyles.HexNumber);
+                    int curDecimalNumber = int.Parse(hexPicture[pixelCount].ToString(), NumberStyles.HexNumber);
                     int iIdx = (curDecimalNumber & firstTwoBits) >> 2; // I-index in pallete array
                     int jIdx = curDecimalNumber & secondTwoBits; // J-index in pallete array
 
                     Color curColor = pallete[iIdx, jIdx];
-                    count++;
-
+                    pixelCount++;
 
                     graphics.FillRectangle(new SolidBrush(curColor), x, y, imageScale, imageScale);
                 }
@@ -54,7 +53,7 @@ namespace Main
         private void ImageHandler()
         {
             Image image = new Image();
-            image.ReadFromFile("./labaARGB.bin");
+            image.ReadFromFile("./6_6_image_4_4_pal.bin");
             
             DrawImage(image.HexPicture, image.Height, image.Width, image.Pallete);
         }
@@ -62,7 +61,6 @@ namespace Main
 
         private void DrawBmpPicture(string hexPicture, int height, int width)
         {
-
             int imageOffset = 200;
 
             int count = 0;
@@ -76,10 +74,10 @@ namespace Main
                     string green = curHexColor.Substring(2, 2);
                     string blue = curHexColor.Substring(4, 2);
 
-                    int alphaInt = Int32.Parse(alpha, NumberStyles.HexNumber);
-                    int redInt = Int32.Parse(red, NumberStyles.HexNumber);
-                    int greenInt = Int32.Parse(green, NumberStyles.HexNumber);
-                    int blueInt = Int32.Parse(blue, NumberStyles.HexNumber);
+                    int alphaInt = int.Parse(alpha, NumberStyles.HexNumber);
+                    int redInt = int.Parse(red, NumberStyles.HexNumber);
+                    int greenInt = int.Parse(green, NumberStyles.HexNumber);
+                    int blueInt = int.Parse(blue, NumberStyles.HexNumber);
 
                     Color color = Color.FromArgb(alphaInt, redInt, greenInt, blueInt);
                     Console.WriteLine(color);

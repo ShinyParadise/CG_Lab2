@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text;
 
 namespace Main
 {
@@ -23,6 +24,26 @@ namespace Main
             ParseData(hexString);
         }
 
+        public void WriteToFile(string filename) 
+        {
+            string hexString = "";
+
+            FileStream fs = new FileStream(filename, FileMode.Create);
+
+            hexString += _width.ToString();
+            hexString += _height.ToString();
+            hexString += _bitsOnPixel.ToString();
+            hexString += _palleteColorNumber.ToString();
+
+            hexString += _pallete.ToString(); // TODO: написать нормально
+            hexString += _hexPicture;
+
+            byte[] bytes = Encoding.ASCII.GetBytes(hexString);
+
+            fs.Write(bytes);
+            fs.Close();
+        }
+
         private void ParseData(string hexString)
         {
             string widthHexStr = hexString.Substring(0, 4);
@@ -38,13 +59,13 @@ namespace Main
             _palleteSideLength = (int)Math.Sqrt(_palleteColorNumber);
             _imageResolution = _width * _height;
 
-            _palleteSize = (_imageResolution * _bitsOnPixel) / 8;
+            _palleteSize = _palleteColorNumber * 4; // упрощение вместо colorNumber * 32 / 8
 
-
-            string hexPallete = hexString.Substring(_headerLength, hexString.Length - _headerLength - _palleteSize * 2);
+            string hexPallete = hexString.Substring(_headerLength, _palleteSize * 2);
             GetPalleteArray(_palleteSideLength, hexPallete);
 
-            _hexPicture = hexString.Substring(142, hexString.Length - 142);
+            int pictureOffset = _headerLength + _palleteSize * 2;
+            _hexPicture = hexString.Substring(pictureOffset, hexString.Length - pictureOffset);
         }
 
         private void GetPalleteArray(int palleteSide, string hexPallete)
@@ -55,7 +76,6 @@ namespace Main
             {
                 for (int x = 0; x < palleteSide; x++)
                 {
-
                     string stringArgb = hexPallete.Substring((y * palleteSide + x) * 8, 8);
                     int argb = Int32.Parse(stringArgb, NumberStyles.HexNumber);
                     Color color = Color.FromArgb(argb);
