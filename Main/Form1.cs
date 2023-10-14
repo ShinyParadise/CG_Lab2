@@ -24,7 +24,7 @@ namespace Main
             graphics = Graphics.FromImage(bitMap);
         }
 
-        private void DrawImage(string hexPicture, int height, int width, Color[,] pallete)
+        private void DrawImage(string hexPicture, int height, int width, Color[,] palette)
         {
             int firstTwoBits = 12; // 1100
             int secondTwoBits = 3; // 0011
@@ -37,10 +37,10 @@ namespace Main
                 {
 
                     int curDecimalNumber = int.Parse(hexPicture[pixelCount].ToString(), NumberStyles.HexNumber);
-                    int iIdx = (curDecimalNumber & firstTwoBits) >> 2; // I-index in pallete array
-                    int jIdx = curDecimalNumber & secondTwoBits; // J-index in pallete array
+                    int iIdx = (curDecimalNumber & firstTwoBits) >> 2; // I-index in palette array
+                    int jIdx = curDecimalNumber & secondTwoBits; // J-index in palette array
 
-                    Color curColor = pallete[iIdx, jIdx];
+                    Color curColor = palette[iIdx, jIdx];
                     pixelCount++;
 
                     graphics.FillRectangle(new SolidBrush(curColor), x, y, imageScale, imageScale);
@@ -57,7 +57,7 @@ namespace Main
             image = new Image();
             image.ReadFromFile("./6_6_image_4_4_pal.bin");
 
-            DrawImage(image.HexPicture, image.Height, image.Width, image.Pallete);
+            DrawImage(image.HexPicture, image.Height, image.Width, image.Palette);
         }
 
 
