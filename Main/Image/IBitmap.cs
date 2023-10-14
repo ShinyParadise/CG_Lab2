@@ -2,8 +2,8 @@
 {
     public interface IBitmap
     {
-        public void ReadFromFile(string filename);
+        void ReadFromFile(string filename);
 
-        public void WriteToFile(string filename);
+        void WriteToFile(string filename);
     }
 }

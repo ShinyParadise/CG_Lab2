@@ -91,7 +91,7 @@ namespace Main.Image
         public int PaletteSide { get => _paletteSide; }
         public int HeaderLength { get => _headerLength; }
         public int ImageSquare { get => _imageResolution; }
-        public int paletteSize { get => _paletteSize; }
+        public int PaletteSize { get => _paletteSize; }
         public string HexPicture { get => _hexPicture; }
         public Color[,] Palette { get => _palette; }
 
