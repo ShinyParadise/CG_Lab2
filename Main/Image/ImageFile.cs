@@ -1,11 +1,10 @@
 ﻿using System.Globalization;
-using System.Text;
 
-namespace Main
+namespace Main.Image
 {
-    public class Image
+    public class ImageFile : IBitmap
     {
-        public Image() {}
+        public ImageFile() { }
 
         public void ReadFromFile(string filename)
         {
@@ -24,7 +23,7 @@ namespace Main
             ParseData(hexString);
         }
 
-        public void WriteToFile(string filename) 
+        public void WriteToFile(string filename)
         {
             string hexString = "";
 
@@ -106,8 +105,8 @@ namespace Main
         private int _paletteSize;
         private int _paletteColorNumber;
         private int _paletteSide;
-        private Color[,] _palette = {};
-        private string _hexPalette;
+        private Color[,] _palette = { };
+        private string _hexPalette = "";
 
         private string _hexPicture = "";
     }

@@ -1,4 +1,4 @@
-using System.Drawing.Imaging;
+using Main.Image;
 using System.Globalization;
 
 namespace Main
@@ -10,18 +10,18 @@ namespace Main
             InitializeComponent();
             InitDrawing();
             ImageHandler();
-            //BmpImageHandler();
         }
 
-        Bitmap bitMap;
+        Bitmap displayedBitmap;
+        BmpFile bmp;
         Graphics graphics;
-        Image image;
+        ImageFile image;
 
         private void InitDrawing()
         {
             Rectangle rectangle = pictureBox1.ClientRectangle;
-            bitMap = new Bitmap(rectangle.Width, rectangle.Height);
-            graphics = Graphics.FromImage(bitMap);
+            displayedBitmap = new Bitmap(rectangle.Width, rectangle.Height);
+            graphics = Graphics.FromImage(displayedBitmap);
         }
 
         private void DrawImage(string hexPicture, int height, int width, Color[,] palette)
@@ -48,51 +48,16 @@ namespace Main
             }
 
 
-            pictureBox1.Image = bitMap;
+            pictureBox1.Image = displayedBitmap;
         }
 
 
         private void ImageHandler()
         {
-            image = new Image();
+            image = new ImageFile();
             image.ReadFromFile("./6_6_image_4_4_pal.bin");
 
             DrawImage(image.HexPicture, image.Height, image.Width, image.Palette);
-        }
-
-
-        private void DrawBmpPicture(string hexPicture, int height, int width)
-        {
-            int imageOffset = 200;
-
-            int count = 0;
-            for (int y = height + imageOffset; y > imageOffset; y--)
-            {
-                for (int x = imageOffset; x < width + imageOffset; x++)
-                {
-                    string curHexColor = hexPicture.Substring(count, 6);
-                    string alpha = "FF";
-                    string red = curHexColor.Substring(0, 2);
-                    string green = curHexColor.Substring(2, 2);
-                    string blue = curHexColor.Substring(4, 2);
-
-                    int alphaInt = int.Parse(alpha, NumberStyles.HexNumber);
-                    int redInt = int.Parse(red, NumberStyles.HexNumber);
-                    int greenInt = int.Parse(green, NumberStyles.HexNumber);
-                    int blueInt = int.Parse(blue, NumberStyles.HexNumber);
-
-                    Color color = Color.FromArgb(alphaInt, redInt, greenInt, blueInt);
-                    Console.WriteLine(color);
-
-                    graphics.FillRectangle(new SolidBrush(color), x, y, 1, 1);
-
-
-                    count += 6;
-                }
-            }
-
-
-            pictureBox1.Image = bitMap;
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -116,22 +81,36 @@ namespace Main
             }
         }
 
-        /*private void BmpImageHandler()
+        private void button1_Click(object sender, EventArgs e)
         {
-            int width;
-            int height;
+            using (OpenFileDialog openFileDialog = new OpenFileDialog() { Filter = @"image|*.bmp" })
+            {
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    bmp = new BmpFile();
+                    bmp.ReadFromFile(openFileDialog.FileName);
+                    displayedBitmap = bmp.Bitmap;
+                    pictureBox1.Image = displayedBitmap;
+                }
+            }
+        }
 
-            string hexString = ReadFile(@".\image_24b.bmp");
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (bmp == null) { return; }
 
-            string widthHexStr = hexString.Substring(18 * 2, 2);
-            string heightHexStr = hexString.Substring(22 * 2, 2);
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"image|*.bmp" })
+            {
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    bmp.WriteToFile(saveFileDialog.FileName);
+                }
+            }
+        }
 
-            width = int.Parse(widthHexStr, NumberStyles.HexNumber);
-            height = int.Parse(heightHexStr, NumberStyles.HexNumber);
-
-
-            string hexPicture = hexString.Substring(54 * 2, hexString.Length - 54 * 2);
-            DrawBmpPicture(hexPicture, height, width);
-        }*/
+        private void button3_Click(object sender, EventArgs e)
+        {
+            // “ут писать код дл€ обработки увеличени€ изображени€
+        }
     }
 }
