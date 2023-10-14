@@ -30,17 +30,15 @@ namespace Main
 
             FileStream fs = new FileStream(filename, FileMode.Create);
 
-            hexString += _width.ToString();
-            hexString += _height.ToString();
-            hexString += _bitsOnPixel.ToString();
-            hexString += _palleteColorNumber.ToString();
+            hexString += _width.ToString("X4");
+            hexString += _height.ToString("X4");
+            hexString += _bitsOnPixel.ToString("X2");
+            hexString += _palleteColorNumber.ToString("X4");
 
-            hexString += _pallete.ToString(); // TODO: написать нормально
+            hexString += _hexPallete;
             hexString += _hexPicture;
 
-            byte[] bytes = Encoding.ASCII.GetBytes(hexString);
-
-            fs.Write(bytes);
+            fs.Write(Convert.FromHexString(hexString));
             fs.Close();
         }
 
@@ -56,28 +54,28 @@ namespace Main
             _height = int.Parse(heightHexStr, NumberStyles.HexNumber);
             _bitsOnPixel = int.Parse(bitOnPixedHexStr, NumberStyles.HexNumber);
             _palleteColorNumber = int.Parse(palleteColorNumberHexStr, NumberStyles.HexNumber);
-            _palleteSideLength = (int)Math.Sqrt(_palleteColorNumber);
+            _palleteSide = (int)Math.Sqrt(_palleteColorNumber);
             _imageResolution = _width * _height;
 
             _palleteSize = _palleteColorNumber * 4; // упрощение вместо colorNumber * 32 / 8
 
-            string hexPallete = hexString.Substring(_headerLength, _palleteSize * 2);
-            GetPalleteArray(_palleteSideLength, hexPallete);
+            _hexPallete = hexString.Substring(_headerLength, _palleteSize * 2);
+            GetPalleteArray(_hexPallete);
 
             int pictureOffset = _headerLength + _palleteSize * 2;
             _hexPicture = hexString.Substring(pictureOffset, hexString.Length - pictureOffset);
         }
 
-        private void GetPalleteArray(int palleteSide, string hexPallete)
+        private void GetPalleteArray(string hexPallete)
         {
-            Color[,] pallete = new Color[palleteSide, palleteSide];
+            Color[,] pallete = new Color[_palleteSide, _palleteSide];
 
-            for (int y = 0; y < palleteSide; y++)
+            for (int y = 0; y < _palleteSide; y++)
             {
-                for (int x = 0; x < palleteSide; x++)
+                for (int x = 0; x < _palleteSide; x++)
                 {
-                    string stringArgb = hexPallete.Substring((y * palleteSide + x) * 8, 8);
-                    int argb = Int32.Parse(stringArgb, NumberStyles.HexNumber);
+                    string stringArgb = hexPallete.Substring((y * _palleteSide + x) * 8, 8);
+                    int argb = int.Parse(stringArgb, NumberStyles.HexNumber);
                     Color color = Color.FromArgb(argb);
 
                     pallete[y, x] = color;
@@ -91,7 +89,7 @@ namespace Main
         public int Height { get => _height; }
         public int BitsOnPixel { get => _bitsOnPixel; }
         public int PalleteColorNumber { get => _palleteColorNumber; }
-        public int PalleteSideLength { get => _palleteSideLength; }
+        public int PalleteSide { get => _palleteSide; }
         public int HeaderLength { get => _headerLength; }
         public int ImageSquare { get => _imageResolution; }
         public int PalleteSize { get => _palleteSize; }
@@ -107,8 +105,9 @@ namespace Main
 
         private int _palleteSize;
         private int _palleteColorNumber;
-        private int _palleteSideLength;
+        private int _palleteSide;
         private Color[,] _pallete = {};
+        private string _hexPallete;
 
         private string _hexPicture = "";
     }

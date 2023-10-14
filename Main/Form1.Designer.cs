@@ -48,6 +48,7 @@
             Controls.Add(pictureBox1);
             Name = "Form1";
             Text = "Form1";
+            KeyDown += Form1_KeyDown;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }

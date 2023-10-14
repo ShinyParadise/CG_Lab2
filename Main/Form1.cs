@@ -1,3 +1,4 @@
+using System.Drawing.Imaging;
 using System.Globalization;
 
 namespace Main
@@ -14,6 +15,7 @@ namespace Main
 
         Bitmap bitMap;
         Graphics graphics;
+        Image image;
 
         private void InitDrawing()
         {
@@ -52,9 +54,9 @@ namespace Main
 
         private void ImageHandler()
         {
-            Image image = new Image();
+            image = new Image();
             image.ReadFromFile("./6_6_image_4_4_pal.bin");
-            
+
             DrawImage(image.HexPicture, image.Height, image.Width, image.Pallete);
         }
 
@@ -93,6 +95,26 @@ namespace Main
             pictureBox1.Image = bitMap;
         }
 
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.S:
+                    SaveImage();
+                    break;
+            }
+        }
+
+        private void SaveImage()
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"binary|*.bin" })
+            {
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    image.WriteToFile(saveFileDialog.FileName);
+                }
+            }
+        }
 
         /*private void BmpImageHandler()
         {
