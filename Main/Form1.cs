@@ -1,4 +1,5 @@
 using Main.Image;
+using System.Drawing.Imaging;
 using System.Globalization;
 
 namespace Main
@@ -97,13 +98,11 @@ namespace Main
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (bmp == null) { return; }
-
             using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"image|*.bmp" })
             {
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    bmp.WriteToFile(saveFileDialog.FileName);
+                    pictureBox1.Image.Save(saveFileDialog.FileName, ImageFormat.Bmp);
                 }
             }
         }
