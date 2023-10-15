@@ -3,7 +3,7 @@ using System.Drawing.Imaging;
 
 namespace Main
 {
-    public class BmpFile : IBitmap
+    public class BmpFile : ISaveable
     {
         public void ReadFromFile(string filename)
         {

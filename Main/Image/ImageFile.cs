@@ -2,7 +2,7 @@
 
 namespace Main.Image
 {
-    public class ImageFile : IBitmap
+    public class ImageFile : ISaveable
     {
         public ImageFile() { }
 
@@ -31,7 +31,7 @@ namespace Main.Image
 
             hexString += _width.ToString("X4");
             hexString += _height.ToString("X4");
-            hexString += _bitsOnPixel.ToString("X2");
+            hexString += _bitsPerPixel.ToString("X2");
             hexString += _paletteColorNumber.ToString("X4");
 
             hexString += _hexPalette;
@@ -46,11 +46,11 @@ namespace Main.Image
             int scaleSize = 2;
             int scaledWidth = _width * scaleSize;
             int scaledHeight = _height * scaleSize;
-            int offset = 8 - _bitsOnPixel;
+            int offset = 8 - _bitsPerPixel;
 
             string newHexImage = "";
 
-            if (_bitsOnPixel == 4)
+            if (_bitsPerPixel == 4)
             {
                 for (int i = 0; i < _height; i++)
                 {
@@ -77,16 +77,16 @@ namespace Main.Image
                 {
                     for (int j = 0; j < _width; j++)
                     {
-                        pixelOffset = (i * _height + j) * _bitsOnPixel;
+                        pixelOffset = (i * _height + j) * _bitsPerPixel;
                         offset = pixelOffset % 8;                        
                         pixel = byteImage[pixelOffset / 8] << offset; // почистили впереди
                         pixel = pixel & mask;
-                        pixel = pixel >> 8 - _bitsOnPixel;
-                        if (offset > 8 - _bitsOnPixel) // не весь пиксель в байте
+                        pixel = pixel >> 8 - _bitsPerPixel;
+                        if (offset > 8 - _bitsPerPixel) // не весь пиксель в байте
                         {
-                            pixel = pixel >> (_bitsOnPixel - 8 + offset);
-                            pixel = pixel << (_bitsOnPixel - 8 + offset);
-                            pixel += byteImage[pixelOffset / 8 + 1] >> (16 - _bitsOnPixel - offset);
+                            pixel = pixel >> (_bitsPerPixel - 8 + offset);
+                            pixel = pixel << (_bitsPerPixel - 8 + offset);
+                            pixel += byteImage[pixelOffset / 8 + 1] >> (16 - _bitsPerPixel - offset);
                         }
 
                         for (int k = 0; k < scaleSize; k++)
@@ -99,17 +99,17 @@ namespace Main.Image
                     }
                 }
 
-                offset = 8 - _bitsOnPixel;
+                offset = 8 - _bitsPerPixel;
                 int bitRemain = 8;
                 pixel = 0;
                 for (int i = 0, j = 0; i < scaledHeight * scaledWidth; i++)
                 {
-                    while (bitRemain > _bitsOnPixel)
+                    while (bitRemain > _bitsPerPixel)
                     {
                         pixel += newByteImage[j] << offset;
                         j++;
-                        bitRemain = bitRemain - _bitsOnPixel;
-                        offset -= _bitsOnPixel;
+                        bitRemain = bitRemain - _bitsPerPixel;
+                        offset -= _bitsPerPixel;
                     }
                     pixel += newByteImage[i] >> Math.Abs(offset);
                     bitRemain = 8;                   
@@ -133,7 +133,7 @@ namespace Main.Image
 
             _width = int.Parse(widthHexStr, NumberStyles.HexNumber);
             _height = int.Parse(heightHexStr, NumberStyles.HexNumber);
-            _bitsOnPixel = int.Parse(bitOnPixedHexStr, NumberStyles.HexNumber);
+            _bitsPerPixel = int.Parse(bitOnPixedHexStr, NumberStyles.HexNumber);
             _paletteColorNumber = int.Parse(paletteColorNumberHexStr, NumberStyles.HexNumber);
             _paletteSide = (int)Math.Sqrt(_paletteColorNumber);
             _imageResolution = _width * _height;
@@ -168,11 +168,11 @@ namespace Main.Image
 
         public int Width { get => _width; }
         public int Height { get => _height; }
-        public int BitsOnPixel { get => _bitsOnPixel; }
+        public int BitsPerPixel { get => _bitsPerPixel; }
         public int PaletteColorNumber { get => _paletteColorNumber; }
         public int PaletteSide { get => _paletteSide; }
         public int HeaderLength { get => _headerLength; }
-        public int ImageSquare { get => _imageResolution; }
+        public int ImageResolution { get => _imageResolution; }
         public int PaletteSize { get => _paletteSize; }
         public string HexPicture { get => _hexPicture; }
         public Color[,] Palette { get => _palette; }
@@ -181,7 +181,7 @@ namespace Main.Image
         private int _height;
         private int _imageResolution;
 
-        private int _bitsOnPixel;
+        private int _bitsPerPixel;
         private readonly int _headerLength = 14;
 
         private int _paletteSize;

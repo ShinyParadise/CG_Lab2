@@ -1,6 +1,6 @@
 ﻿namespace Main.Image
 {
-    public interface IBitmap
+    public interface ISaveable
     {
         void ReadFromFile(string filename);
 

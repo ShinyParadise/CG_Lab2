@@ -82,6 +82,7 @@
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(pictureBox1);
+            KeyPreview = true;
             Name = "Form1";
             Text = "Form1";
             KeyDown += Form1_KeyDown;

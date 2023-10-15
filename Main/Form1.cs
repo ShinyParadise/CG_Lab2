@@ -32,19 +32,19 @@ namespace Main
             int imageScale = 30;   // увеличение изображения для того чтобы его было видно на экране
 
             int pixelCount = 0;
-            for (int y = 0; y < height * imageScale; y += imageScale)
+            for (int x = 0; x < height * imageScale; x += imageScale)
             {
-                for (int x = 0; x < width * imageScale; x += imageScale)
+                for (int y = 0; y < width * imageScale; y += imageScale)
                 {
 
                     int curDecimalNumber = int.Parse(hexPicture[pixelCount].ToString(), NumberStyles.HexNumber);
-                    int iIdx = (curDecimalNumber & firstTwoBits) >> 2; // I-index in palette array
-                    int jIdx = curDecimalNumber & secondTwoBits; // J-index in palette array
+                    int idX = (curDecimalNumber & firstTwoBits) >> 2; // I-index in palette array
+                    int idY = curDecimalNumber & secondTwoBits; // J-index in palette array
 
-                    Color curColor = palette[iIdx, jIdx];
+                    Color curColor = palette[idX, idY];
                     pixelCount++;
 
-                    graphics.FillRectangle(new SolidBrush(curColor), x, y, imageScale, imageScale);
+                    graphics.FillRectangle(new SolidBrush(curColor), y, x, imageScale, imageScale);
                 }
             }
 
@@ -56,7 +56,7 @@ namespace Main
         private void ImageHandler()
         {
             image = new ImageFile();
-            image.ReadFromFile("./5_5_image_5_5_pal.bin");
+            image.ReadFromFile("./labaARGB.bin");
 
             DrawImage(image.HexPicture, image.Height, image.Width, image.Palette);
         }
