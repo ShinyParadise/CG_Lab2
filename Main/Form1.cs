@@ -110,7 +110,8 @@ namespace Main
 
         private void button3_Click(object sender, EventArgs e)
         {
-            // “ут писать код дл€ обработки увеличени€ изображени€
+            image.Scale();
+            InitDrawing();
         }
     }
 }

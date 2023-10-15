@@ -41,6 +41,12 @@ namespace Main.Image
             fs.Close();
         }
 
+        public void Scale()
+        {
+            //да, я залила две строчки и пустую функцию и что вы мне сделаете
+            int x = 0;
+        }
+
         private void ParseData(string hexString)
         {
             string widthHexStr = hexString.Substring(0, 4);
