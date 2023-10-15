@@ -42,9 +42,27 @@ namespace Main.Image
         }
 
         public void Scale()
-        {
-            //да, я залила две строчки и пустую функцию и что вы мне сделаете
-            int x = 0;
+        { 
+            // при размере в 4 бита:
+            int scaledWidth = _width * 2;
+            int scaledHeight = _height * 2;
+
+            string newHexPicture = "";
+
+            for (int i = 0; i < _height; i++)
+            {
+                string newRow = "";
+                for (int j = 0; j < _width; j++)
+                {
+                    char c = _hexPicture[i * _height + j];
+                    newRow += c;
+                    newRow += c;
+                }
+                newHexPicture += newRow + newRow;
+            }
+            _hexPicture = newHexPicture;
+            _width = scaledWidth;
+            _height = scaledHeight;
         }
 
         private void ParseData(string hexString)
