@@ -2,9 +2,32 @@
 
 namespace Main.Image
 {
-    public class ImageFile : ISaveable
+    public class ImageFile : ISaveable, ICloneable
     {
         public ImageFile() { }
+
+        public ImageFile(int width,
+            int height,
+            int imageResolution,
+            int bitsPerPixel,
+            int paletteSize,
+            int paletteColorNumber,
+            int paletteSide,
+            Color[,] palette,
+            string hexPalette,
+            string hexPicture)
+        {
+            _width = width;
+            _height = height;
+            _imageResolution = imageResolution;
+            _bitsPerPixel = bitsPerPixel;
+            _paletteSize = paletteSize;
+            _paletteColorNumber = paletteColorNumber;
+            _paletteSide = paletteSide;
+            _palette = palette;
+            _hexPalette = hexPalette;
+            _hexPicture = hexPicture;
+        }
 
         public void ReadFromFile(string filename)
         {
@@ -182,16 +205,22 @@ namespace Main.Image
             _palette = palette;
         }
 
-        public int Width { get => _width; }
-        public int Height { get => _height; }
-        public int BitsPerPixel { get => _bitsPerPixel; }
-        public int PaletteColorNumber { get => _paletteColorNumber; }
-        public int PaletteSide { get => _paletteSide; }
+        public object Clone()
+        {
+            var cloned = new ImageFile(_width, _height, _imageResolution, _bitsPerPixel, _paletteSize, _paletteColorNumber, _paletteSide, _palette, _hexPalette, _hexPicture);
+            return cloned;
+        }
+
+        public int Width { get => _width; set => _width = value; }
+        public int Height { get => _height; set => _height = value; }
+        public int BitsPerPixel { get => _bitsPerPixel; set => _bitsPerPixel = value; }
+        public int PaletteColorNumber { get => _paletteColorNumber; set => _paletteColorNumber = value; }
+        public int PaletteSide { get => _paletteSide; set => _paletteSide = value; }
         public int HeaderLength { get => _headerLength; }
-        public int ImageResolution { get => _imageResolution; }
-        public int PaletteSize { get => _paletteSize; }
-        public string HexPicture { get => _hexPicture; }
-        public Color[,] Palette { get => _palette; }
+        public int ImageResolution { get => _imageResolution; set => _imageResolution = value; }
+        public int PaletteSize { get => _paletteSize; set => _paletteSize = value; }
+        public string HexPicture { get => _hexPicture; set => _hexPicture = value; }
+        public Color[,] Palette { get => _palette; set => _palette = value;  }
 
         private int _width;
         private int _height;

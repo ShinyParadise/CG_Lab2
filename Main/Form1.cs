@@ -1,4 +1,5 @@
 using Main.Image;
+using Main.Transoformers;
 using System.Drawing.Imaging;
 using System.Globalization;
 
@@ -17,6 +18,8 @@ namespace Main
         BmpFile bmp;
         Graphics graphics;
         ImageFile image;
+        GammaChanger gammaChanger;
+        ContrastChanger contrastChanger;
 
         private void InitDrawing()
         {
@@ -25,8 +28,14 @@ namespace Main
             graphics = Graphics.FromImage(displayedBitmap);
         }
 
-        private void DrawImage(string hexPicture, int height, int width, Color[,] palette)
+        private void DrawImage(ImageFile image)
         {
+            graphics.Clear(Color.Transparent);
+            string hexPicture = image.HexPicture;
+            int height = image.Height;
+            int width = image.Width;
+            Color[,] palette = image.Palette;
+
             int firstTwoBits = 12; // 1100
             int secondTwoBits = 3; // 0011
             int imageScale = 30;   // увеличение изображения для того чтобы его было видно на экране
@@ -47,8 +56,6 @@ namespace Main
                     graphics.FillRectangle(new SolidBrush(curColor), y, x, imageScale, imageScale);
                 }
             }
-
-
             pictureBox1.Image = displayedBitmap;
         }
 
@@ -56,9 +63,12 @@ namespace Main
         private void ImageHandler()
         {
             image = new ImageFile();
-            image.ReadFromFile("./labaARGB.bin");
+            image.ReadFromFile("./5_5_image_5_5_pal.bin");
 
-            DrawImage(image.HexPicture, image.Height, image.Width, image.Palette);
+            gammaChanger = new GammaChanger(image);
+            contrastChanger = new ContrastChanger(image, 50);
+
+            DrawImage(image);
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -110,7 +120,22 @@ namespace Main
         private void button3_Click(object sender, EventArgs e)
         {
             image.Scale();
-            DrawImage(image.HexPicture, image.Height, image.Width, image.Palette);
+            DrawImage(image);
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            gammaChanger = new GammaChanger((ImageFile)image.Clone(), trackBar1.Value / 2f);
+            gammaChanger.Transform();
+            DrawImage(gammaChanger.Image);
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            var value = BitConverter.GetBytes(trackBar2.Value)[0];
+            contrastChanger = new ContrastChanger((ImageFile)image.Clone(), value);
+            contrastChanger.Transform();
+            DrawImage(contrastChanger.Image);
         }
     }
 }

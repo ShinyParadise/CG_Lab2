@@ -32,7 +32,13 @@
             button1 = new Button();
             button2 = new Button();
             button3 = new Button();
+            trackBar1 = new TrackBar();
+            label1 = new Label();
+            trackBar2 = new TrackBar();
+            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBar2).BeginInit();
             SuspendLayout();
             // 
             // pictureBox1
@@ -73,11 +79,55 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
+            // trackBar1
+            // 
+            trackBar1.Location = new Point(1138, 171);
+            trackBar1.Maximum = 4;
+            trackBar1.Name = "trackBar1";
+            trackBar1.Size = new Size(294, 56);
+            trackBar1.TabIndex = 4;
+            trackBar1.Value = 2;
+            trackBar1.Scroll += trackBar1_Scroll;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(1258, 207);
+            label1.Name = "label1";
+            label1.Size = new Size(54, 20);
+            label1.TabIndex = 5;
+            label1.Text = "Гамма";
+            // 
+            // trackBar2
+            // 
+            trackBar2.LargeChange = 51;
+            trackBar2.Location = new Point(1138, 280);
+            trackBar2.Maximum = 255;
+            trackBar2.Name = "trackBar2";
+            trackBar2.Size = new Size(294, 56);
+            trackBar2.SmallChange = 51;
+            trackBar2.TabIndex = 6;
+            trackBar2.Value = 255;
+            trackBar2.Scroll += trackBar2_Scroll;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(1249, 316);
+            label2.Name = "label2";
+            label2.Size = new Size(72, 20);
+            label2.TabIndex = 7;
+            label2.Text = "Контраст";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1444, 707);
+            Controls.Add(label2);
+            Controls.Add(trackBar2);
+            Controls.Add(label1);
+            Controls.Add(trackBar1);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
@@ -87,7 +137,10 @@
             Text = "Form1";
             KeyDown += Form1_KeyDown;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBar1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBar2).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -96,5 +149,9 @@
         private Button button1;
         private Button button2;
         private Button button3;
+        private TrackBar trackBar1;
+        private Label label1;
+        private TrackBar trackBar2;
+        private Label label2;
     }
 }
