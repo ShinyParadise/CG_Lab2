@@ -55,7 +55,7 @@ namespace Main
         private void ImageHandler()
         {
             image = new ImageFile();
-            image.ReadFromFile("./6_6_image_4_4_pal.bin");
+            image.ReadFromFile("./5_5_image_5_5_pal.bin");
 
             DrawImage(image.HexPicture, image.Height, image.Width, image.Palette);
         }

@@ -42,25 +42,83 @@ namespace Main.Image
         }
 
         public void Scale()
-        { 
-            // при размере в 4 бита:
-            int scaledWidth = _width * 2;
-            int scaledHeight = _height * 2;
+        {
+            int scaleSize = 2;
+            int scaledWidth = _width * scaleSize;
+            int scaledHeight = _height * scaleSize;
+            int offset = 8 - _bitsOnPixel;
 
-            string newHexPicture = "";
+            string newHexImage = "";
 
-            for (int i = 0; i < _height; i++)
+            if (_bitsOnPixel == 4)
             {
-                string newRow = "";
-                for (int j = 0; j < _width; j++)
+                for (int i = 0; i < _height; i++)
                 {
-                    char c = _hexPicture[i * _height + j];
-                    newRow += c;
-                    newRow += c;
+                    string newRow = "";
+                    for (int j = 0; j < _width; j++)
+                    {
+                        char c = _hexPicture[i * _height + j];
+                        // ок
+                        newRow += c;
+                        newRow += c;
+                    }
+                    newHexImage += newRow + newRow;
                 }
-                newHexPicture += newRow + newRow;
             }
-            _hexPicture = newHexPicture;
+            else
+            {
+                byte[] newByteImage = new byte[scaledWidth * scaledHeight];
+                byte[] byteImage = Convert.FromHexString(_hexPicture);
+                int pixel;
+                int pixelOffset;
+                int mask = 255;
+
+                for (int i = 0; i < _height; i++)
+                {
+                    for (int j = 0; j < _width; j++)
+                    {
+                        pixelOffset = (i * _height + j) * _bitsOnPixel;
+                        offset = pixelOffset % 8;                        
+                        pixel = byteImage[pixelOffset / 8] << offset; // почистили впереди
+                        pixel = pixel & mask;
+                        pixel = pixel >> 8 - _bitsOnPixel;
+                        if (offset > 8 - _bitsOnPixel) // не весь пиксель в байте
+                        {
+                            pixel = pixel >> (_bitsOnPixel - 8 + offset);
+                            pixel = pixel << (_bitsOnPixel - 8 + offset);
+                            pixel += byteImage[pixelOffset / 8 + 1] >> (16 - _bitsOnPixel - offset);
+                        }
+
+                        for (int k = 0; k < scaleSize; k++)
+                        {
+                            for (int n = 0; n < scaleSize; n++)
+                            {
+                                newByteImage[scaleSize * (scaleSize * i + k) * _width + scaleSize * j + n] = (byte)pixel;
+                            }
+                        }
+                    }
+                }
+
+                offset = 8 - _bitsOnPixel;
+                int bitRemain = 8;
+                pixel = 0;
+                for (int i = 0, j = 0; i < scaledHeight * scaledWidth; i++)
+                {
+                    while (bitRemain > _bitsOnPixel)
+                    {
+                        pixel += newByteImage[j] << offset;
+                        j++;
+                        bitRemain = bitRemain - _bitsOnPixel;
+                        offset -= _bitsOnPixel;
+                    }
+                    pixel += newByteImage[i] >> Math.Abs(offset);
+                    bitRemain = 8;                   
+                    newHexImage += ((byte)pixel).ToString("X2"); // записать пиксель
+                    offset = 8 - Math.Abs(offset);
+                }
+            }
+
+            _hexPicture = newHexImage;
             _width = scaledWidth;
             _height = scaledHeight;
         }
