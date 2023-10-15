@@ -73,6 +73,7 @@ namespace Main.Image
                 int pixelOffset;
                 int mask = 255;
 
+                // вычленяются и дублируются 5-битовые пиксели (в теории любое кол-во меньше 8, не равное 4)
                 for (int i = 0; i < _height; i++)
                 {
                     for (int j = 0; j < _width; j++)
@@ -99,22 +100,37 @@ namespace Main.Image
                     }
                 }
 
+
+                // упаковка, не работает
                 offset = 8 - _bitsOnPixel;
                 int bitRemain = 8;
                 pixel = 0;
-                for (int i = 0, j = 0; i < scaledHeight * scaledWidth; i++)
+                for (int j = 0; j < scaledHeight * scaledWidth - 1; )
                 {
-                    while (bitRemain > _bitsOnPixel)
-                    {
-                        pixel += newByteImage[j] << offset;
+                    while (bitRemain >= _bitsOnPixel)
+                    {                        
+                        pixel += (byte)(newByteImage[j] << offset);
                         j++;
                         bitRemain = bitRemain - _bitsOnPixel;
                         offset -= _bitsOnPixel;
                     }
-                    pixel += newByteImage[i] >> Math.Abs(offset);
-                    bitRemain = 8;                   
-                    newHexImage += ((byte)pixel).ToString("X2"); // записать пиксель
-                    offset = 8 - Math.Abs(offset);
+
+                    if (bitRemain != 0)
+                    {
+                        pixel += (byte)(newByteImage[j] >> (_bitsOnPixel - bitRemain));
+                        newHexImage += ((byte)pixel).ToString("X2"); // записать пиксель
+                        pixel = (byte)(newByteImage[j] << (8 - _bitsOnPixel + bitRemain));
+                        j++;
+                        offset = 8 - _bitsOnPixel - bitRemain + 1;
+                        bitRemain = 8 - (_bitsOnPixel - bitRemain);
+                    }
+                    else
+                    {
+                        offset = 8 - _bitsOnPixel;
+                        bitRemain = 8;
+                        newHexImage += ((byte)pixel).ToString("X2");
+                        pixel = 0;
+                    }
                 }
             }
 
