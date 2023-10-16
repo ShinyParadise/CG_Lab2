@@ -23,7 +23,9 @@ namespace Main.Transoformers
                     byte r = palette[i, j].R;
                     byte g = palette[i, j].G;
                     byte b = palette[i, j].B;
+
                     newPalette[i, j] = Color.FromArgb(
+                        palette[i, j].A,
                         (int)Math.Round(r * _gamma % 255),
                         (int)Math.Round(g * _gamma % 255),
                         (int)Math.Round(b * _gamma % 255)

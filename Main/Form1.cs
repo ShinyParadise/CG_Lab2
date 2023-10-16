@@ -100,8 +100,7 @@ namespace Main
                 {
                     bmp = new BmpFile();
                     bmp.ReadFromFile(openFileDialog.FileName);
-                    displayedBitmap = bmp.Bitmap;
-                    pictureBox1.Image = displayedBitmap;
+                    pictureBox1.Image = bmp.Bitmap;
                 }
             }
         }

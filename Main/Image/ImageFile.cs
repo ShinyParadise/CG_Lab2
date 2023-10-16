@@ -190,15 +190,15 @@ namespace Main.Image
         {
             Color[,] palette = new Color[_paletteSide, _paletteSide];
 
-            for (int y = 0; y < _paletteSide; y++)
+            for (int x = 0; x < _paletteSide; x++)
             {
-                for (int x = 0; x < _paletteSide; x++)
+                for (int y = 0; y < _paletteSide; y++)
                 {
-                    string stringArgb = _hexPalette.Substring((y * _paletteSide + x) * 8, 8);
+                    string stringArgb = _hexPalette.Substring((x * _paletteSide + y) * 8, 8);
                     int argb = int.Parse(stringArgb, NumberStyles.HexNumber);
                     Color color = Color.FromArgb(argb);
 
-                    palette[y, x] = color;
+                    palette[x, y] = color;
                 }
             }
 

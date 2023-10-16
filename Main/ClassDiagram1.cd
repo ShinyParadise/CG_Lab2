@@ -6,7 +6,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAIgADgCAgQEEAQIggGABQBAAAgAGACAAAAAAoAA=</HashCode>
+      <HashCode>AAAAAAAADgCAgQEEAQIgAGABQJAACgAGACAAABAAoBA=</HashCode>
       <FileName>Image\ImageFile.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -25,7 +25,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>ABAAEAAAADAAAAIAAACEAAACEAA4AQgAAHAAAABAABA=</HashCode>
+      <HashCode>IBAAEAAEEDAAABIAAACEAAACEAA4AQgAAHAAAgBAABA=</HashCode>
       <FileName>Form1.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -36,7 +36,7 @@
   <Class Name="Main.Transoformers.GammaChanger" BaseTypeListCollapsed="true">
     <Position X="7" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAQAAAAAAAQAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAQBAAAAAAQAABAAA=</HashCode>
       <FileName>Transoformers\GammaChanger.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -44,7 +44,7 @@
   <Class Name="Main.Transoformers.ContrastChanger" BaseTypeListCollapsed="true">
     <Position X="8.75" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAQAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAQAAAAAQBAAAAAAAAgAAAA=</HashCode>
       <FileName>Transoformers\ContrastChanger.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
