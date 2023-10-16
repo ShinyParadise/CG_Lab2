@@ -125,36 +125,27 @@ namespace Main.Image
 
 
                 // упаковка, не работает
-                offset = 8 - _bitsPerPixel;
                 int bitRemain = 8;
+                int pixRemain = 5;
                 pixel = 0;
-                for (int j = 0; j < scaledHeight * scaledWidth - 1; )
+                for (int j = 1; j <= scaledHeight * scaledWidth; j++)
                 {
-                    while (bitRemain >= _bitsPerPixel)
-                    {                        
-                        pixel += (byte)(newByteImage[j] << offset);
-                        j++;
-                        bitRemain = bitRemain - _bitsPerPixel;
-                        offset -= _bitsPerPixel;
-                    }
-
-                    if (bitRemain != 0)
+                    offset = (8 - (j * _bitsPerPixel) % 8) % 8; //где бит закончился
+                    pixel += newByteImage[j - 1] << offset;
+                    bitRemain = (8 - (j * _bitsPerPixel) % 8) % 8; 
+                    
+                    if ((bitRemain < _bitsPerPixel) && (bitRemain != 0))
                     {
-                        pixel += (byte)(newByteImage[j] >> (_bitsPerPixel - bitRemain));
+                        offset = _bitsPerPixel - bitRemain;
+                        pixel += newByteImage[j] >> offset;
+                        bitRemain = 0;                    
+                    }
+                    if (bitRemain <= 0)
+                    {
                         newHexImage += ((byte)pixel).ToString("X2"); // записать пиксель
-                        pixel = (byte)(newByteImage[j] << (8 - _bitsPerPixel + bitRemain));
-                        j++;
-                        offset = 8 - _bitsPerPixel - bitRemain + 1;
-                        bitRemain = 8 - (_bitsPerPixel - bitRemain);
-                    }
-                    else
-                    {
-                        offset = 8 - _bitsPerPixel;
-                        bitRemain = 8;
-                        newHexImage += ((byte)pixel).ToString("X2");
                         pixel = 0;
                     }
-                }
+                }    
             }
 
             _hexPicture = newHexImage;
